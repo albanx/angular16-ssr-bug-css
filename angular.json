@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ciam_spa_angular16",
+            "outputPath": "dist/ciam_spa_angular16/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -30,7 +30,12 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              {
+                "input": "src/styles2.scss",
+                "inject": true,
+                "bundleName": "extra"
+              }
             ],
             "scripts": []
           },
@@ -97,6 +102,61 @@
             ],
             "scripts": []
           }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/ciam_spa_angular16/server",
+            "main": "server.ts",
+            "tsConfig": "tsconfig.server.json",
+            "inlineStyleLanguage": "scss"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false,
+              "vendorChunk": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "ciam_spa_angular16:build:development",
+              "serverTarget": "ciam_spa_angular16:server:development"
+            },
+            "production": {
+              "browserTarget": "ciam_spa_angular16:build:production",
+              "serverTarget": "ciam_spa_angular16:server:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "ciam_spa_angular16:build:production",
+              "serverTarget": "ciam_spa_angular16:server:production"
+            },
+            "development": {
+              "browserTarget": "ciam_spa_angular16:build:development",
+              "serverTarget": "ciam_spa_angular16:server:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }
